@@ -1,0 +1,11 @@
+const fs = require('fs');
+const path = require('path');
+const src = path.join(__dirname, '..', 'public');
+const dest = path.join(__dirname, '..', 'www');
+fs.rmSync(dest, { recursive: true, force: true });
+fs.cpSync(src, dest, { recursive: true });
+const cfg = path.join(dest, 'runtime-config.js');
+if (!fs.existsSync(cfg)) throw new Error('runtime-config.js missing');
+const text = fs.readFileSync(cfg, 'utf8');
+if (/YOUR-API-DOMAIN/.test(text)) console.warn('WARNING: Set public/runtime-config.js API_BASE_URL to your deployed HTTPS API before release.');
+console.log('UZRAN web assets copied to www/');
